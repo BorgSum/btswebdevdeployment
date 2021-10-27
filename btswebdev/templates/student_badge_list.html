@@ -1,0 +1,58 @@
+{% extends 'student_base.html'%}
+{% block content %}
+<div class="bg-white text-dark w-75">
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-3 mt-4 text-dark ">
+			<div class='container'>
+				<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/student">Home</a></li>
+			    		<li class="breadcrumb-item active" aria-current="page">Badges</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+	</div>
+</style>
+<div class='d-flex justify-content-center'>
+	<div class="p-1 mt-2 w-75 text-dark">
+		<div class='container'>
+<h3>Badge List</h3>
+    </div>
+  </div>
+</div>
+	<div class='d-flex justify-content-center'>
+		<div class="mb-4 w-75">
+      {% if item_list == '' %}
+				<p class="card-text text-center me-4 mb-4 mt-4">There are no badges at this time.</p>
+			{% else %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          {% for item in item_list %}  
+            <div class="col">
+              <div class="card h-100">
+                {% if item.obtained == False %}
+                  <img src="{{ item.badge.badge_unallocated_image.url }}" class="rounded mx-auto d-block mt-2" alt="...">
+                {% else %}
+                  <img src="{{ item.badge.badge_allocated_image.url }}" class="rounded mx-auto d-block mt-2" alt="...">
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title text-center">{{ item.badge.badge_title }}</h5>
+                  <p class="card-text text-center">{{ item.badge.badge_title }}</p>
+                </div>
+                <div class="card-footer text-center">
+                  <a href="/student/badge/{{item.badge.badge_id}}" class="btn btn-outline-primary btn-sm">View Details</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+	</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

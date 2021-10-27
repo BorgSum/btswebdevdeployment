@@ -1,0 +1,10 @@
+User Details:
+    Admin:
+        - username: jayden
+        - password: pass
+    Student:
+        - username: student
+        - password: stu12345
+    Staff:
+        - username: staff
+        - password: sta12345

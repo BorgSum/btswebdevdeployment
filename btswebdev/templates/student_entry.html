@@ -1,0 +1,64 @@
+{% extends 'student_base.html'%}
+{% block content %}
+<div class="bg-white text-dark w-75">
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-3 mt-4 text-dark ">
+			<div class='container'>
+				<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/student">Home</a></li>
+			    		<li class="breadcrumb-item"><a href="/student/entry/">Student Entries</a></li>
+			    		<li class="breadcrumb-item active" aria-current="page">Entry Details</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="card mb-4 w-75">
+			<h5 class="card-header">Entry Details</h5>
+			<div class="card-body">
+    			<h4 class="card-title">{{ query_set.entry_title}}</h4>
+	  			<p class="card-text"><small class="text-muted">{{ query_set.entry_date}}</small></p>
+    			<p class="card-text">{{ query_set.entry_content }}</p>
+				<div class="row row-cols-1 row-cols-md-3 g-4 mb-4 mt-2">
+  					{% for image in image_set %}
+		  				<div class="col justify-content-center">
+		  					<div class="card h-100 justify-content-center">
+	  							<img class="card-img-top" src="{{ image.entry_image_file.url }}" alt="" height="200">
+			  				</div>
+						</div>
+					{% endfor %}
+				</div>
+				<div class="row">
+				<form class="col-auto me-md-2" action="/student/{{ query_set.get_absolute_url}}/edit/delete" method='POST' enctype="multipart/form-data">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-danger">Delete Entry</button>
+				</form>
+				<a href="/student/{{ query_set.get_absolute_url}}/edit" class="col-auto btn btn-primary">Edit Entry</a>
+  			</div></div>
+		</div>
+	</div>
+
+	<div class='d-flex justify-content-center'>
+		<div class="card mb-4 w-75">
+			<h5 class="card-header">Comments</h5>
+			{% if comment_set == '' %}
+				<p class="card-text text-center me-4 mb-4 mt-4">There are no comments at this time.</p>
+			{% else %}
+				<div class="list-group">
+					{% for comment in comment_set %}	
+    					<a class="list-group-item list-group-item-action">
+        					<div class="d-flex w-100 justify-content-between mb-0.5 mt-2">
+            					<h6>{{ comment.staff_id.first_name }} {{ comment.staff_id.last_name }}</h6>
+            					<small>{{ comment.comment_date }}</small>
+        					</div>
+        					<p class="mb-2">{{ comment.comment_text }}</p>
+    					</a>
+					{% endfor %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}

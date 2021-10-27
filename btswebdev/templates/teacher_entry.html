@@ -1,0 +1,106 @@
+{% extends 'teacher_base.html'%}
+{% block content %}
+<div class="bg-white text-dark w-75">
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-2 mt-2 text-dark ">
+			<div class='container'>
+					<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/teacher">Home</a></li>
+			    		<li class="breadcrumb-item"><a href="/teacher/student/">Students</a></li>
+			    		<li class="breadcrumb-item"><a href="/teacher/student/{{query_set.report_id.student_id.id}}">Details</a></li>
+			    		<li class="breadcrumb-item active" aria-current="page">Entry</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75  text-dark ">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					<h3>Teacher Entry View</h3>
+					<p>Student Name: {{ query_set.report_id.student_id.first_name }} {{ query_set.report_id.student_id.last_name }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-1 mt-2 w-75 text-dark">
+			<div class='container'>
+				<h4>Entry Title</h4>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark ">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					<div class='container'>
+						<h4>{{ query_set.entry_title}}</h4>
+						<div class='bg-white p-2 card'>
+							<p>{{ query_set.entry_content }}</p>
+						</div>
+						{% for image in image_set %}
+							<img class="ImageReduction" src="{{ image.entry_image_file.url }}" alt="" width="300"></br>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-1 mt-2 w-75 text-dark">
+			<div class='container'>
+				<h4>Comments</h4>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark ">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					{% if comment_set == '' %}
+						<p>There are no comments at this time</p>
+					{% else %}
+						{% for comment in comment_set %}
+							{% if forloop.counter0|divisibleby:2 %}
+								<div class="comments">
+									<p><b>{{ comment.comment.staff_id.first_name }} {{ comment.comment.staff_id.last_name }}</b></br>
+									{{ comment.comment.comment_date }}</br>
+									{{ comment.comment.comment_text }}</p></br>
+									{% for image in comment.comment_image %}
+										<div class="pt-2 row justify-content-md-center">
+											<img class="comment_image" src="{{ image.comment_image_file.url }}">
+										</div>
+									{% endfor %}
+								</div>
+							{% else %}
+								<div class="comments bg-white">
+									<p><b>{{ comment.comment.staff_id.first_name }} {{ comment.comment.staff_id.last_name }}</b></br>
+									{{ comment.comment.comment_date }}</br>
+									{{ comment.comment.comment_text }}</p></br>	
+									{% for image in comment.comment_image %}
+									<div class="pt-2 row justify-content-md-center">
+										<img class="comment_image" src="{{ image.comment_image_file.url }}">
+									</div>
+									{% endfor %}
+								</div>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+					<h5>Enter Comment:</h5>
+					<!-- Change the action url to a new page that creates a comment and directs it elsewhere -->
+					<form action='/teacher/entry/{{ query_set.entry_id }}/create/' method='POST' enctype="multipart/form-data">{% csrf_token %}
+						{{ form.comment_text }}
+						<div class='pt-2 d-flex justify-content-end'>
+							<button type="submit" class="btn btn-outline-success">Post</button>
+							<input type="file" multiple name="images">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

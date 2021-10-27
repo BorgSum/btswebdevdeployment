@@ -1,0 +1,18 @@
+{% extends 'teacher_base.html' %}
+{% block content %}
+<h1>Report Page</h1>
+<form href="" method="POST" >{% csrf_token %}
+	{{ report_form.as_p}}
+	<input class="createnewreportbtn" type="submit" value="Create New Report">
+</form>
+<h2>Reports List</h2>
+{% if report_list == '' %}
+	<h4>Notice</h4>
+	<p>You have no Reports yet please create one to continue</p>
+{% else %}
+	{% for report in report_list %}
+		<h3>{{ report.report_title }}</h3>
+		<p>Active {{ report.report_active }}</p>
+	{% endfor %}
+{% endif %}
+{% endblock %}

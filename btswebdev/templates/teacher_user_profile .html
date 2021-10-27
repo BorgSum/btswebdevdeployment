@@ -1,0 +1,15 @@
+{% extends 'teacher_base.html' %}
+
+{% block content %}
+
+<dev class="content-section">
+    <dev class="media">
+        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+        <div class="media-body">
+            <h2 class="account-heading">{{ teacher.first_name }} {{ teacher.last_name }}</h2>
+            <h2 class="account-heading">{{ teacher.id }}</h2>
+            <p class="text-secondary">{{ teacher.email }}</p>
+        </div>
+    </dev>
+</dev>
+{% endblock %}

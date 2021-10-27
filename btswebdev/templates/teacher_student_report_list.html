@@ -1,0 +1,28 @@
+{% extends 'teacher_base.html' %}
+{% block content %}
+	<h1>{{ student_details.first_name }} {{student_details.last_name }}</h1>
+	<h3>Active Reports</h3>
+	{% for report in report_list %}
+		{% if report.report_active == True %}
+			<h4>{{ report.report_title }}</h4>
+			<p>{{ report.report_start_date }}-{{ report.report_end_date }}</p>
+			<form class="AdditionalCommentForm" method="POST" action="/teacher/reports/{{ report.student_id }}/{{report.report_id}}/view">{% csrf_token %}
+				<input type="text" name="addComment" id="addComment" >
+			    <input class="EntryFormFile" type="submit" value="Generate Report" />
+			</form>
+		{% endif %}
+	{% endfor%}
+	<h3>Past Reports</h3>
+	{% for report in report_list %}
+		{% if report.report_active == False %}
+			<h4>{{ report.report_title }}</h4>
+			<p>{{ report.report_start_date }}-{{ report.report_end_date }}</p>
+			<form class="AdditionalCommentForm" method="POST" action="">
+			    {% csrf_token %}
+			    {{ entry_form.as_p}}
+			    <input class="EntryFormFile" type="submit" value="Generate Report" />
+			</form>
+		{% endif %}
+	{% endfor%}
+</div>
+{% endblock %}

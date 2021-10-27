@@ -1,0 +1,121 @@
+{% extends 'student_base.html' %}
+{% block content %}
+<div class="bg-white text-dark w-75">
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-2 mt-2 text-dark ">
+			<div class='container'>
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item active" aria-current="page">Home</li>
+					</ol>
+				</nav>
+			</div>
+			<div class='mt-4'>
+				<div class='container'>
+					<div class='bts_background'>
+						<h3>Entries</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark ">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					<div class="table-responsive">
+<a class="others" href="/student/entry/create"></a>
+<td>
+	<form action="/student/entry/create{{ Create }}">
+		<button type="submit" class="btn btn-primary btn-sm">Create</button>
+	</form>
+</td>
+<div class='pt-2 d-flex justify-content-end'></div>
+<table id="entry_table">
+		<table class="table table-hover bg-white">
+		<thead class="table-dark">
+	<tr>
+		<th>Date</th>
+		<th>Title</th>
+		<th>Content</th>
+		<th colspan="1">Comments</th>
+		<th></th>
+	</tr>
+		</thead>
+{% if not query_set %}
+	<td colspan="4">You have no entries</td>
+{% else %}
+	{% for entry in query_set|slice:":6" %}
+		<tr>
+			<td>{{ entry.entry_date }}</td>
+			<td>{{ entry.entry_title }}</td>
+			<td>{{ entry.entry_content}}</td>
+			<td>{{ entry.num_comments }}</td>
+			<td 
+			colspan="2" class="noborder"><a href="/student/{{ entry.get_absolute_url }}/" ></a>
+			<form action="/student/{{ entry.get_absolute_url }}/">
+				<button type="submit" class="btn btn-primary btn-sm">View</button>
+			</form>
+		</td>
+		</tr>
+	{% endfor %}
+{% endif %}
+</table>
+
+</div>
+</div>
+<a class="others" href="/student/entry/"></a>
+<div class='pt-2 d-flex justify-content-end'>
+	<form action="/student/entry">
+		<button type="submit" class="btn btn-outline-success">More...</button>
+	</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class='d-flex justify-content-center'>
+	<div class="p-1 mt-2 w-75 text-dark">
+		<div class='container'>
+<h3>Badges</h3>
+		</div>
+	</div>
+</div>
+<div class='d-flex justify-content-center'>
+	<div class="p-3 mb-3 w-75 card bg-light text-dark">
+		<div class='container'>
+			<div class="pt-2 row justify-content-md-center">
+				<div class="table-responsive">
+					<table class="table table-hover bg-white">
+						<thead class="table-dark">
+<table>
+	{% for badge in alloc_list|slice:":6" %}
+		{% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
+		<td>
+			<div class='pt-2 row justify-content-center'>
+				<div class="p-3 mb-3 w-80 card bg-light text-dark ">
+					<div class='container'>
+			<img src="{{ badge.badge_id.badge_allocated_image.url }}">
+			<h5>{{ badge.badge_id.badge_title }}</h5>
+			Allocated by: {{ badge.staff_id.first_name }} {{ badge.staff_id.last_name }}</br> 
+			Date: {{ badge.alloc_date }}</p>
+		</div></div>
+		</td>
+		{% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
+		{% empty %}
+			<p>No Badges Allocated at this time</p>
+	{% endfor %}
+</table>
+	</div>
+</div>
+	<a class="others" href="/student/badge/"></a>
+<div class='pt-2 d-flex justify-content-end'>
+	<form action="/student/badge">
+		<button type="submit" class="btn btn-outline-success">Allocate</button>
+	</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}

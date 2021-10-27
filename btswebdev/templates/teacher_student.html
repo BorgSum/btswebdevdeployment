@@ -1,0 +1,159 @@
+{% extends 'teacher_base.html' %}
+{% block content %}
+<div class="bg-white text-dark w-75">
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-2 mt-2 text-dark ">
+			<div class='container'>
+					<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/teacher">Home</a></li>
+			    		<li class="breadcrumb-item"><a href="/teacher/student/">Students</a></li>
+			    		<li class="breadcrumb-item active" aria-current="page">Details</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-2 mt-2 text-dark ">
+				<div class='container'>
+					<h3 class="p-3">Student Details</h3>
+					<div class="row g-0">
+						<div class="col">
+							<img src="{{ student_details.student_profile.image.url }}" style="border-radius: 50%; height:150px;">
+						</div>
+						<div class="col-md-9 pt-4">
+							<h4>Name: {{ student.first_name }} {{ student.last_name }}</h4>
+							<p>Contact: {{ student.email }}</p>
+						</div>
+					</div>
+					<h3 class="p-3">Student Report</h3>
+				</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark ">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					<div class="table-responsive">
+						<table class="table table-hover bg-white">
+							<thead class="table-dark">
+								<tr>
+									<th>Report Name</th>
+									<th>Report Start</th>
+									<th></th>
+									<th>Report End</th>
+									<th>Entries</th>
+									<th>Active</th>
+									<th></th>
+								</tr>
+									</thead>
+							{% for report in student_reports|slice:":6" %}
+								<tr>
+									<td>{{ report.report_title }}</td>
+									<td>{{ report.report_start_date }}</td>
+									<td>-</td>
+									<td>{{ report.report_end_date }}</td>
+									<td>{{ report.num_entries }}</td>
+									<td>{{ report.report_active }}</td>
+									<td>
+										<form action="report/{{ report.report_id }}">
+											<button type="submit" class="btn btn-primary btn-sm">View</button>
+										</form>
+									</td>
+								</tr>
+								{% empty %}
+									<td colspan='6'>No Report Created for student</td>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-1 mt-2 w-75 text-dark">
+			<div class='container'>
+				<h3>Student Entries</h3>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark ">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					<div class="table-responsive">
+						<table class="table table-hover bg-white">
+							<thead class="table-dark">
+								<tr>
+									<th>Date</th>
+									<th>Title</th>
+									<th>content</th>
+									<th>Comments</th>
+									<th></th>
+								</tr>
+							</thead>
+							{% for entry in student_entries|slice:":6" %}
+								<tr>
+									<td>{{ entry.entry_date }}</td>
+									<td>{{ entry.entry_title }}</td>
+									<td>{{ entry.entry_content}}</td>
+									<td>{{ entry.num_comments }}</td>
+									<td>
+										<form action="/teacher/{{ entry.get_absolute_url }}/">{% csrf_token %}
+											<button type="submit" class="btn btn-primary btn-sm">View</button>
+										</form>
+									</td>
+								</tr>
+								{% empty %}
+									<td colspan='4'>No entries Created for student</td>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class='pt-2 d-flex justify-content-end'>
+				<form action="entry/">{% csrf_token %}
+					<button type="submit" class="btn btn-outline-success">More...</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-1 mt-2 w-75 text-dark">
+			<div class='container'>
+				<h3>Student Badges</h3>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark ">
+			<div class='container'>
+				<div class="d-flex justify-content-center">
+					<div class="table-responsive">
+						<table>
+							{% for badge in student_badges %}
+								{% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
+								<td>
+									<img src="{{ badge.badge_id.badge_allocated_image.url }}">
+									<h5>{{ badge.badge_id.badge_title }}</h5>
+									Allocated by: {{ badge.staff_id.first_name }} {{ badge.staff_id.last_name }}</br> 
+									Date: {{ badge.alloc_date }}</p>
+								</td>
+								{% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
+								{% empty %}
+									<p>No Badges Allocated at this time</p>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+				<div class='pt-2 d-flex justify-content-end'>
+					<form action="/teacher/student/{{ student_id }}/badge/">
+				    	<button type="submit" class="btn btn-outline-success">Allocate</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

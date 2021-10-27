@@ -1,0 +1,77 @@
+{% extends 'teacher_base.html' %}
+{% block content %}
+<div class="bg-white text-dark w-75">
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-2 mt-2 text-dark ">
+			<div class='container'>
+					<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/teacher">Home</a></li>
+			    		<li class="breadcrumb-item"><a href="/teacher/badge/">Badge</a></li>
+			    		<li class="breadcrumb-item active" aria-current="page">Details</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-2 mt-2 text-dark ">
+			<div class='container'>
+				<h3>Badge details</h3>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark ">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					<img src='{{ badge_info.badge_allocated_image.url }}' class="badge_image"/>
+					<h5>{{ badge_info.badge_title }}</h5>
+					<p>{{ badge_info.badge_description }}<p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-2 mt-2 text-dark ">
+			<div class='container'>
+				<h3>Unallocated Students</h3>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark ">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					<div class="table-responsive">
+						<table class="table table-hover bg-white">
+							<thead class="table-dark">
+								<tr>
+									<td>Student ID</td>
+									<td>First Name</td>
+									<td>Last Name</td>
+									<td></td>
+								</tr>
+							</thead>
+							{% for student in unalloc_list %}
+							<tr>
+								<td>{{ student.id }}</td>
+								<td>{{ student.first_name }}</td>
+								<td>{{ student.last_name }}</td>
+								<td>
+									<form  method="POST" action="/teacher/student/{{ student.id }}/badge/{{ badge_info.badge_id }}/" >{% csrf_token %} 
+											<button type="submit" class="btn btn-primary btn-sm">Allocate</button>
+										</form>
+								</td>
+							</tr>
+							{% empty %}
+								<td colspan='4'>Badge has been allocated to all available students</td>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

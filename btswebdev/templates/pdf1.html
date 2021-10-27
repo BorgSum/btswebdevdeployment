@@ -1,0 +1,107 @@
+<html>
+<head>
+		<meta charset="utf-8">
+		<style>
+			@page {
+		        size: a4 portrait;
+		        @frame header_frame {           /* Static Frame */
+		            -pdf-frame-content: header_content;
+		            left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+		        }
+		        @frame content_frame {          /* Content Frame */
+		            left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+		        }
+		        @frame footer_frame {           /* Another static Frame */
+		            -pdf-frame-content: footer_content;
+		            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+		        }
+		        
+		       
+	    	}
+		</style>
+</head>
+<body>
+	<div id="header_content"><img src="../media/background/bts-school-logo.jpg" width="200", height="200"></div>
+	<h1>Ballarat Tech School</h1>
+	<h2> Program end of placement observational report</h2>
+	<table>
+		<tr>
+			<td>
+				<p><b>Student Name:</b> {{ student_details.first_name }} {{ student_details.last_name }}</p>
+			</td>
+			<td>
+				<p><b>Report generated:</b> {% now "SHORT_DATETIME_FORMAT"  %} by {{ teacher_details.first_name }} {{teacher_details.last_name }}</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p><b>Placement Dates:</b> {{ report_details.report_start_date }} - {{ report_details.report_end_date }}</p>
+			</td>
+			<td>
+				<p><b>Teacher(s):</b> List of teachers who are mentioned in report</p>
+			</td>
+		</tr>
+	</table>
+	<table>
+	<div>
+		<p><b>Additional Comments:</b></p>
+			<p>{{ additional_comments }}</p>
+		<h5>Entries:</h5>
+		{% for entry in report_entries %}
+			<table>
+				<tr>
+					<td>
+						<h4>{{ entry.entry_title }}, {{ entry.entry_date | date:"M d, Y"}}:</h4>
+						
+					</td>
+				</tr>
+			</table>
+			<p>{{ entry.entry_content }}</p>
+			{% for image in image_list %}
+				{% for item in image %}
+					<div class='image_size'>
+					{% if item.entry_id == entry%}
+						<img src="..{{ item.entry_image_file.url}}" alt="" width="300">
+					{% endif %}
+					</div>
+				{% endfor %}
+			{% endfor %}
+			<h6>Comments:</h6>
+			{% for item in comment_list %}
+				{% for comment in item %}
+					{% if comment.entry_id == entry %}
+						<p>{{ comment.staff_id.first_name }} {{ comment.staff_id.last_name }}:</p>
+						<p>{{ comment.comment_text }}</p>
+						{% for image in teacher_images %}
+							{% for item in image %}
+								{% if item.comment_id == comment %}
+									<img src="..{{ item.comment_image_file.url}}" alt="" width="300">
+								{% endif %}
+							{% endfor %}
+						{% endfor %}
+					{% endif%}
+				{% endfor %}
+			{% endfor %}
+		{% endfor %}
+		<h5>Badges</h5>
+		<hr>
+		<table>
+			{% for badge in badge_list %}
+				{% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
+					<td>
+						<img src="..{{ badge.badge_id.badge_allocated_image.url }}" width="100">
+						<p><b>{{ badge.badge_id.badge_title }}</b></p>
+						<p>Obtained: {{ badge.alloc_date }}</p>
+						<p>{{ badge.badge_id.badge_description }}</p>
+					</td>
+				{% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
+			{% endfor %}
+		</table>
+	</div>
+	</table>
+	<div id="footer_content">
+		page <pdf:pagenumber>
+        of <pdf:pagecount>
+    </div>
+</body>
+</html>

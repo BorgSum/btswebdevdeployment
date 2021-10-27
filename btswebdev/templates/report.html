@@ -1,0 +1,56 @@
+{% extends 'teacher_base.html' %}
+{% block content %}
+<div class="bg-white text-dark w-75">
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-2 mt-2 text-dark ">
+			<div class='container'>
+					<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/teacher">Home</a></li>
+			    		<li class="breadcrumb-item active" aria-current="page">Reports</li>
+					</ol>
+				</nav>
+			</div>
+			<div class='mt-4'>
+				<div class='container'>
+					<h3>Report List</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark ">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					<div class="table-responsive">
+						<table class="table table-hover bg-white">
+							<thead class="table-dark">
+								<tr>
+									<th>Student ID</th>
+									<th>Student Name</th>
+									<th>Report Name</th>
+									<th>Active Report</th>
+									<th>View Reports</th>
+								</tr>
+							</thead>
+							{% for report in student_reports %}
+								<tr>
+									<td>{{ report.student_id.id }}</td>
+									<td>{{ report.student_id.first_name }} {{ report.student_id.last_name }}</td>
+									<td>{{ report.report_title }}</td>
+									<td>{{ report.report_active }}</td>
+									<td>
+										<form action="/teacher/student/{{ report.student_id.id }}/report/{{ report.report_id }}/">
+											<button type="submit" class="btn btn-primary btn-sm">View</button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

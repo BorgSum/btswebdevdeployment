@@ -1,0 +1,117 @@
+{% extends 'teacher_base.html' %}
+{% block content %}
+<div class="bg-white text-dark w-75">
+	<div class='d-flex justify-content-center'>
+		<div class="w-75 mb-2 mt-2 text-dark ">
+			<div class='container'>
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item active" aria-current="page">Home</li>
+					</ol>
+				</nav>
+			</div>
+			<div class='mt-4'>
+				<div class='container'>
+					<div class='bts_background'>
+						<h3>Enrolled Students</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark ">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					<div class="table-responsive">
+						<table class="table table-hover bg-white">
+							<thead class="table-dark">
+								<tr>
+									<th>Profile Pic</th>
+									<th>Student ID</th>
+									<th>Student Name</th>
+									<th>Email</th>
+									<th></th>
+								</tr>
+							</thead>
+						{% for student in profile_list|slice:":6" %}
+							<tr>
+								{% if student.profile_details == None %}
+									<td>No Profile</td>
+								{% else %}
+									<td>
+										<img src="{{ student.profile_details.image.url }}" style="border-radius: 50%; height:50px;">
+									</td>
+								{% endif %}
+								<td>{{ student.user_details.id }}</td>
+								<td>{{ student.user_details.first_name }} {{ student.user_details.last_name }}</td>
+								<td>{{ student.user_details.email }}</td>
+								<td>
+									<form action="/teacher/student/{{ student.user_details.id }}">
+										<button type="submit" class="btn btn-primary btn-sm">View</button>
+									</form>
+								</td>
+							</tr>
+						{% endfor %}
+						</table>
+				</div>
+				</div>
+				<div class='pt-2 d-flex justify-content-end'>
+					<form action="/teacher/student">
+						<button type="submit" class="btn btn-outline-success">More...</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-1 mt-2 w-75 text-dark">
+			<div class='container'>
+				<h3>Recent Entries</h3>
+			</div>
+		</div>
+	</div>
+	<div class='d-flex justify-content-center'>
+		<div class="p-3 mb-3 w-75 card bg-light text-dark">
+			<div class='container'>
+				<div class="pt-2 row justify-content-md-center">
+					<div class="table-responsive">
+						<table class="table table-hover bg-white">
+							<thead class="table-dark">
+								<tr>
+									<th>Student</th>
+									<th>Date</th>
+									<th>Title</th>
+									<th>Content</th>
+									<th>Comments</th>
+									<th></th>
+								</tr>
+							</thead>
+						{% for entry in entry_list|slice:":6" %}
+							<tr>
+								<td>{{ entry.report_id.student_id.first_name }} {{ entry.report_id.student_id.last_name }}</td>
+								<td>{{ entry.entry_date }}</td>
+								<td>{{ entry.entry_title }}</td>
+								
+								<td>{{ entry.entry_content|slice:":20" }} {% if entry.entry_content|length > 20 %}...{% endif %}</td>
+								<td>{{ entry.num_comments }}</td>
+								<td>
+									<form action="/teacher/{{ entry.get_absolute_url }}">
+										<button type="submit" class="btn btn-primary btn-sm">View</button>
+									</form>
+								</td>
+							</tr>
+						{% endfor %}
+						</table>
+					</div>
+				</div>
+				<div class='pt-2 d-flex justify-content-end'>
+					<form action="/teacher/entry/">
+						<button type="submit" class="btn btn-outline-success">More...</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
